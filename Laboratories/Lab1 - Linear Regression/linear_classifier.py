@@ -51,20 +51,20 @@ class LinearClassifier:
 
         Y = np.zeros((N, K))
         transposedW = np.transpose(self.params)
-        print "Transposed W shape: (%s, %s)" % transposedW.shape
+        #print "Transposed W shape: (%s, %s)" % transposedW.shape
 
         bias_components = np.ones((N, 1))
-        print "Bias Components for X shape: (%s, %s)" % bias_components.shape
+        #print "Bias Components for X shape: (%s, %s)" % bias_components.shape
 
         XwithBiasComponents = np.hstack((X, bias_components))
-        print "X with Bias Components shape: (%s, %s)" % XwithBiasComponents.shape
+        #print "X with Bias Components shape: (%s, %s)" % XwithBiasComponents.shape
 
         transposedXwithBiasComponents = np.transpose(XwithBiasComponents)
-        print "Transposed X with Bias Components shape: (%s, %s)" % transposedXwithBiasComponents.shape
+        #print "Transposed X with Bias Components shape: (%s, %s)" % transposedXwithBiasComponents.shape
 
         Y = np.dot(transposedW, transposedXwithBiasComponents)
         Y = np.transpose(Y)
-        print "Y shape: %s %s" % Y.shape
+        #print "Y shape: %s %s" % Y.shape
 
         assert Y.shape == (N, K)
 
@@ -80,35 +80,47 @@ class LinearClassifier:
 
         ## Compute gradient and update parameters
         XwithBias = np.hstack((X, np.ones((N, 1))))
-        print "X with Bias Components shape: (%s, %s)" % XwithBias.shape
+        #print "X with Bias Components shape: (%s, %s)" % XwithBias.shape
         
         # We have N examples, of dimension D+bias (D+1)
         # We generate N outputs with K classes = dimension (N, K)
+        #print self.params
         XW = np.dot(XwithBias, self.params)
-        print "XW dot product shape: (%s, %s)" % XW.shape
+        #print "XW dot product shape: (%s, %s)" % XW.shape
+        
         # We compute the error (difference between computed output and target 
         # output classes) of dimension (N,K))
         targetDifference = XW - T
-        print "XW - T shape: (%s, %s)" % targetDifference.shape
+        #print "XW - T shape: (%s, %s)" % targetDifference.shape
+        
         # The gradient is the difference above transposed (of dimension
         # (K, N)) multiplied by X (of dimension (N, D+1)) resulting
         # a matrix of dimension (K, D+1)
         targetDifferenceTransposed = np.transpose(targetDifference)
-        print "XW - T transposed shape: (%s, %s)" % targetDifferenceTransposed.shape
+        #print "XW - T transposed shape: (%s, %s)" % targetDifferenceTransposed.shape
+        
         # Gradient with respect to the parameters = multiplication of the error
         # transposed (target difference transposed, of dimension (K, N)) with
         # the examples of dimension (N, D+1) resulting in a matrix of dimension
         # (K, D+1)
         gradientWithRespectToWeights = np.dot(targetDifferenceTransposed, XwithBias)
-        print "Gradient with respect to the Parameters shape: (%s, %s)" % gradientWithRespectToWeights.shape
+        #print "Gradient with respect to the Parameters shape: (%s, %s)" % gradientWithRespectToWeights.shape
+        
+        # Gradients sum up because we process a batch of inputs
+        # a set of inputs consisting of equally distributed samples of digits from 0 to 9
+        # We have to divide the summed up gradient values by the number of examples in the batch
+        gradientWithRespectToWeights = gradientWithRespectToWeights / N
+        #print np.mean(np.abs(gradientWithRespectToWeights))
+        
         # We adjust the gradient values with the learning rate
         # resulting a matrix of dimension (K, D+1)
         # gradient = np.dot(np.transpose(np.dot(np.append(X, np.ones((X.shape[0], 1)), axis=1), self.params) - T), X)
         adjustedGradient = lr * gradientWithRespectToWeights
-        print "Learning rate adjusted gradient shape: (%s, %s)" % adjustedGradient.shape
+        #print "Learning rate adjusted gradient shape: (%s, %s)" % adjustedGradient.shape
+        
         # And subtract the adjusted gradient values transposed (of dimension (D+1, K)
         # from the parameters (of dimension (D+1, K), resulting of a matrix of
         # of dimension (K, D+1)
         updatedParams = self.params - np.transpose(adjustedGradient)
-        print "Adjusted params shape: (%s, %s)" % updatedParams.shape
+        #print "Adjusted params shape: (%s, %s)" % updatedParams.shape
         self.params = updatedParams
