@@ -16,7 +16,7 @@ class SigmoidClassifier:
     def output(self, X):
         assert self.params is not None, "No parameters"
 
-        ## TODO: Replace this code with a correct implementation
+        # Replace this code with a correct implementation
         (N, D) = X.shape
         (pD, K) = self.params.shape
         
@@ -51,14 +51,14 @@ class SigmoidClassifier:
 
         # Compute the gradient and update the parameters
         Y = self.output(X)
-        #print "Output: ", Y
+        # print "Output: ", Y
         
         XwithBias = np.hstack((X, np.ones((N, 1))))
         # Gradient wrt Parameters = ((Y - T) * Y * (1 - Y))' * X
         error = Y - T
 
         assert error.shape == (N, K)
-        #print "Error: ", error 
+        # print "Error: ", error 
 
         dotErrorY = error * Y
         assert dotErrorY.shape == (N, K)
@@ -71,7 +71,7 @@ class SigmoidClassifier:
 
         gradientWRTParams = np.dot(np.transpose(product), XwithBias) / N
         assert gradientWRTParams.shape == (K, D+1)
-        #print "Gradient Mean: ", np.mean(np.abs(gradientWRTParams))
+        # print "Gradient Mean: ", np.mean(np.abs(gradientWRTParams))
 
         self.params = self.params - np.transpose(lr * gradientWRTParams)
         assert self.params.shape == (D+1, K)
