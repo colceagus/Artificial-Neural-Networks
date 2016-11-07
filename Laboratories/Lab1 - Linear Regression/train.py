@@ -57,7 +57,7 @@ T_test = np.zeros((N_test, L_test.max() + 1))
 T_test[np.arange(N_test), L_test] = 1
 tstop = timeit()
 print "MNIST Test Dataset: %s" % (tstop - tstart)
-'''
+
 # ------------------------------------------------------------------------------
 # ------ Closed form solution
 
@@ -100,7 +100,7 @@ print(conf)
 plot_confusion_matrix(conf, 2, "Linear model - gradient")
 
 print("-------------------")
-'''
+
 # ------------------------------------------------------------------------------
 # ------ Non-linear model
 
@@ -127,8 +127,8 @@ print("-------------------")
 
 plt.figure(4)
 
-#plt.plot(np.arange(1, EPOCHS_NO+1), acc1, label="Closed form")
-#plt.plot(np.arange(1, EPOCHS_NO+1), acc2, label="Linear model")
+plt.plot(np.arange(1, EPOCHS_NO+1), acc1, label="Closed form")
+plt.plot(np.arange(1, EPOCHS_NO+1), acc2, label="Linear model")
 plt.plot(np.arange(1, EPOCHS_NO+1), acc3, label="Non-linear model")
 plt.legend(loc="lower right")
 plt.show()
