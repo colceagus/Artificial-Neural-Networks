@@ -40,8 +40,9 @@ class LinearClassifier:
         print "Done. Time elapsed: %s" % (tstop - tstart)
 
         self.params = W
-        print "%s %s" % self.params.shape, (D+1, K)
+        # print "%s %s" % self.params.shape, (D+1, K)
         assert self.params.shape == (D+1, K)
+
 
     def output(self, X):
         assert self.params is not None, "No parameters"
@@ -69,6 +70,7 @@ class LinearClassifier:
         assert Y.shape == (N, K)
 
         return Y
+
 
     def update_params(self, X, T, lr):
         (N, D) = X.shape
