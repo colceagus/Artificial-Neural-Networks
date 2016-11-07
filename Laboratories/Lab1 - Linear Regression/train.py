@@ -76,7 +76,7 @@ plot_confusion_matrix(conf, 1, "Closed form")
 acc1 = np.ones(EPOCHS_NO) * acc
 
 print("-------------------")
-'''
+
 # ------------------------------------------------------------------------------
 # ------ Gradient optimization of linear model
 
@@ -127,9 +127,9 @@ print("-------------------")
 
 plt.figure(4)
 
-plt.plot(np.arange(1, EPOCHS_NO+1), acc1, label="Closed form")
-plt.plot(np.arange(1, EPOCHS_NO+1), acc2, label="Linear model")
+#plt.plot(np.arange(1, EPOCHS_NO+1), acc1, label="Closed form")
+#plt.plot(np.arange(1, EPOCHS_NO+1), acc2, label="Linear model")
 plt.plot(np.arange(1, EPOCHS_NO+1), acc3, label="Non-linear model")
 plt.legend(loc="lower right")
 plt.show()
-'''
+
