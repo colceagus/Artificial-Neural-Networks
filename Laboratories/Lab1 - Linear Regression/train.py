@@ -10,6 +10,10 @@ from mnist_loader import load_mnist
 from linear_classifier import LinearClassifier
 from sigmoid_classifier import SigmoidClassifier
 
+####### BENCHMARK #######
+t_program_start = timeit()
+#########################
+
 EPOCHS_NO = 400
 LEARNING_RATE = 0.004
 REPORT_EVERY = 40
@@ -37,7 +41,7 @@ def plot_confusion_matrix(conf_matrix, figure_id, title):
 tstart = timeit()
 data = load_mnist()
 tstop = timeit()
-print "Load MNIST: %d" % (tstop - tstart)
+print "Load MNIST: %s" % (tstop - tstart) # prints in seconds
 
 tstart = timeit()
 N_train = data["train_no"]
@@ -47,7 +51,7 @@ L_train = data["train_labels"][:N_train]
 T_train = np.zeros((N_train, L_train.max() + 1))
 T_train[np.arange(N_train), L_train] = 1
 tstop = timeit()
-print "MNIST Train Dataset: %s" % (tstop - tstart)
+print "MNIST Train Dataset: %s" % (tstop - tstart) # in seconds
 
 tstart = timeit()
 N_test = data["test_no"]
@@ -56,7 +60,7 @@ L_test = data["test_labels"]
 T_test = np.zeros((N_test, L_test.max() + 1))
 T_test[np.arange(N_test), L_test] = 1
 tstop = timeit()
-print "MNIST Test Dataset: %s" % (tstop - tstart)
+print "MNIST Test Dataset: %s" % (tstop - tstart) # ditto
 
 # ------------------------------------------------------------------------------
 # ------ Closed form solution
@@ -65,6 +69,7 @@ cf_model = LinearClassifier()
 tstart = timeit()
 cf_model.closed_form(X_train, T_train)
 tstop = timeit()
+
 print "Closed-Form Train Time: %s" % (tstop - tstart)
 
 acc, conf = evaluate(cf_model, X_test, L_test)
@@ -75,11 +80,14 @@ plot_confusion_matrix(conf, 1, "Closed form")
 
 acc1 = np.ones(EPOCHS_NO) * acc
 
+tstop = timeit()
+print "Closed-Form Execution Time: %s" % (tstop - tstart)
+
 print("-------------------")
 
 # ------------------------------------------------------------------------------
 # ------ Gradient optimization of linear model
-
+tstart = timeit()
 grad_model = LinearClassifier()
 
 acc2 = np.zeros(EPOCHS_NO)
@@ -99,11 +107,15 @@ while ep <= EPOCHS_NO:
 print(conf)
 plot_confusion_matrix(conf, 2, "Linear model - gradient")
 
+tstop = timeit()
+print "Gradient Optimization on Linear Model Execution Time: %s" \
+        % (tstop - tstart)
+
 print("-------------------")
 
 # ------------------------------------------------------------------------------
 # ------ Non-linear model
-
+tstart = timeit()
 sig_model = SigmoidClassifier()
 
 ep = 1
@@ -123,8 +135,16 @@ while ep <= EPOCHS_NO:
 print(conf)
 plot_confusion_matrix(conf, 3, "Sigmoid model")
 
+tstop = timeit()
+print "Gradient Optimization on Non-Linear Model Execution Time: %s" \
+        % (tstop - tstart)
 print("-------------------")
 
+####### BENCHMARK END #######
+tstop = timeit()
+print "Gradient Optimization on Non-Linear Model Execution Time: %s" \
+        % (tstop - t_program_start)
+#############################
 plt.figure(4)
 
 plt.plot(np.arange(1, EPOCHS_NO+1), acc1, label="Closed form")
@@ -132,4 +152,5 @@ plt.plot(np.arange(1, EPOCHS_NO+1), acc2, label="Linear model")
 plt.plot(np.arange(1, EPOCHS_NO+1), acc3, label="Non-linear model")
 plt.legend(loc="lower right")
 plt.show()
+
 
