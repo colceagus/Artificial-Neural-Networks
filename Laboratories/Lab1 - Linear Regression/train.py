@@ -142,7 +142,7 @@ print("-------------------")
 
 ####### BENCHMARK END #######
 tstop = timeit()
-print "Gradient Optimization on Non-Linear Model Execution Time: %s" \
+print "Benchmark Execution Time: %s" \
         % (tstop - t_program_start)
 #############################
 plt.figure(4)
